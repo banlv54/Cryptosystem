@@ -11,22 +11,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150810134801) do
+ActiveRecord::Schema.define(version: 20150818092716) do
 
   create_table "ciphers", force: :cascade do |t|
     t.text     "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "max_length"
   end
 
   create_table "documents", force: :cascade do |t|
     t.text     "content"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.integer  "cipher_id"
     t.string   "title"
+    t.string   "encryption_type"
   end
 
   add_index "documents", ["cipher_id"], name: "index_documents_on_cipher_id"
+
+  create_table "key_pairs", force: :cascade do |t|
+    t.string   "key"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
 end

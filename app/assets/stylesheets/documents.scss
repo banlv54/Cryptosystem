@@ -1,7 +1,10 @@
 // Place all the styles related to the documents controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-.document-show {
+body {
+    padding-left: 100px;
+}
+.document-show, .document-index {
   h1 {
     text-align: center;
   }
