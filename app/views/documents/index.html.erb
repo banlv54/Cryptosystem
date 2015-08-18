@@ -1,0 +1,15 @@
+<h1>Enter your documents</h1>
+<%= form_for @document do |f| %>
+  Title: <%= f.text_field :title %></br>
+  Content: </br> <%= f.text_area :content, size: "100x20" %>
+  </br>
+  <%= f.submit %>
+<% end %>
+<h2> List document </h2>
+<table>
+  <% Document.all.each do |document| %>
+    <tr>
+      <td><%= link_to document.title || "Demo", document_path(document) %></td>
+    </tr>
+  <% end %>
+</table>

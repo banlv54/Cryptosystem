@@ -1,0 +1,11 @@
+<% @body_class = "document-show" %>
+<h1>Documents#show</h1>
+<h3> Bản rõ </h3>
+<div class="content">
+  <%= simple_format @cipher_encryptor.document.html_safe %>
+</div>
+
+<h3> Bản mã </h3>
+<div class="content break-word">
+  <%= simple_format @document.content.html_safe %>
+</div>
