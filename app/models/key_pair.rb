@@ -1,11 +1,15 @@
 class KeyPair < ActiveRecord::Base
   class << self
-    def import_databases doc
+    def import_databases keys, doc
       l = doc.length
       i = 0
       ActiveRecord::Base.transaction do
         while(i < l)
-          KeyPair.find_or_create_by key: doc[i..i+1]
+          key = doc[i..i+1]
+          if keys.exclude?(key)
+            KeyPair.create key: key
+            keys << key
+          end
           i += 2
         end
       end

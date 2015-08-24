@@ -24,9 +24,15 @@ class CipherEncryptor
     l = @document.length
     hash_invert = @hash_map.invert
     jum = max_length.to_s.length
+    arr_number = ('0'..'9').to_a
     while(i < l-1)
-      res += hash_invert[@document[i..i + jum - 1]] || ""
-      i += jum
+      if arr_number.include? @document[i]
+        res += hash_invert[@document[i..i + jum - 1]]
+        i += jum
+      else
+        res += @document[i]
+        i+= 1
+      end
     end
     @document = res
   end
@@ -53,7 +59,8 @@ class CipherEncryptor
 
   private
   def import_databases
-    KeyPair.import_databases @document
+    keys = KeyPair.pluck(:key)
+    KeyPair.import_databases keys, @document
   end
 
   def get_keys
