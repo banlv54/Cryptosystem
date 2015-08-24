@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150818092716) do
+ActiveRecord::Schema.define(version: 20150824071130) do
 
   create_table "ciphers", force: :cascade do |t|
     t.text     "content"
@@ -32,6 +32,30 @@ ActiveRecord::Schema.define(version: 20150818092716) do
   add_index "documents", ["cipher_id"], name: "index_documents_on_cipher_id"
 
   create_table "key_pairs", force: :cascade do |t|
+    t.string   "key"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "key_penta", force: :cascade do |t|
+    t.string   "key"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "key_quadruples", force: :cascade do |t|
+    t.string   "key"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "key_singles", force: :cascade do |t|
+    t.string   "key"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "key_triples", force: :cascade do |t|
     t.string   "key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

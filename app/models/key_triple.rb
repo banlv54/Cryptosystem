@@ -1,9 +1,9 @@
-class KeyPair < ActiveRecord::Base
+class KeyTriple < ActiveRecord::Base
   include KeyImport
 
   class << self
     def key_type
-      2
+      3
     end
   end
 end

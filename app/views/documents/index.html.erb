@@ -9,34 +9,29 @@
 <% end %>
 
 <ul class="nav nav-tabs">
-  <li class="active"><a data-toggle="tab" href="#home">Mã hóa bộ đơn</a></li>
-  <li><a data-toggle="tab" href="#menu1">Mã hóa bộ đôi</a></li>
-  <li><a data-toggle="tab" href="#menu2">Import bộ đôi</a></li>
+  <li class="active"><a data-toggle="tab" href="#menu1">Mã hóa</a></li>
+  <li><a data-toggle="tab" href="#menu2">Import keys</a></li>
 </ul>
 
 <div class="tab-content">
-  <div id="home" class="tab-pane fade in active">
+  <div id="menu1" class="tab-pane active">
     <%= form_for @document, class: "form-group" do |f| %>
       Title: <%= f.text_field :title, class: "form-control" %>
       Content: </br> <%= f.text_area :content, size: "100x20", class: "form-control" %>
+      Key type <%= select_tag :type, options_for_select((1..5).to_a), class: "form-control" %>
       <br/>
       <%= f.submit class: "btn btn-primary" %>
     <% end %>
   </div>
-  <div id="menu1" class="tab-pane fade">
-    <%= form_for @document, class: "form-group" do |f| %>
-      Title: <%= f.text_field :title, class: "form-control" %>
-      Content: </br> <%= f.text_area :content, size: "100x20", class: "form-control" %>
-      <%= hidden_field_tag :type, "pair" %>
-      <br/>
-      <%= f.submit class: "btn btn-primary" %>
-    <% end %>
-  </div>
+
   <div id="menu2" class="tab-pane fade">
     <%= form_for @document, class: "form-group" do |f| %>
       Link:  <%= text_field_tag :link, "", size: "100px", class: "form-control" %>
+      Start ID <%= number_field_tag :start_id, 1, class: "form-control" %>
+      End ID <%= number_field_tag :end_id, 0, class: "form-control" %>
+      Key type <%= select_tag :type, options_for_select((1..5).to_a), class: "form-control" %>
       <br/>
-      <%= f.submit class: "btn btn-primary" %>
+      <%= f.submit class: "btn btn-primary import_data" %>
     <% end %>
   </div>
 </div>
@@ -50,3 +45,25 @@
     </tr>
   <% end %>
 </table>
+
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+
+<div id="myModal" class="modal fade in" role="dialog" aria-hidden="false" style="display: block;">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"></button>
+        <h4 class="modal-title">Loading...</h4>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <%= image_tag "loading.gif" %>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="modal-backdrop fade in"></div>

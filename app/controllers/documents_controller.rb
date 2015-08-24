@@ -6,6 +6,7 @@ class DocumentsController < ApplicationController
   end
 
   def create
+    # http://www.govap.hochiminhcity.gov.vn/chuyende/lists/posts/post.aspx?ItemID=651
     import_database and return if params[:link]
     cipher_encryptor = CipherEncryptor.new(nil, document_params[:content], params[:type])
     cipher_encryptor.encode
@@ -39,10 +40,24 @@ class DocumentsController < ApplicationController
   end
 
   def import_database
-    doc = Nokogiri::HTML(open(params[:link]))
-      .css("div#ctl00_IDContent_ctl00_divContent").text.squeeze
-    count = KeyPair.count
-    KeyPair.import_databases doc
-    redirect_to root_path(count: KeyPair.count - count)
+    start_id, end_id, type = [params[:start_id], params[:end_id], params[:type]]
+      .map &:to_i
+    diff = end_id - start_id + 1
+    model = CipherEncryptor::MODELS[params[:type].to_i].constantize
+    count = model.count
+    keys = model.pluck :key
+    if diff <= 0
+      doc = Nokogiri::HTML(open(params[:link])).text.squeeze.strip.gsub /\r\n|\r|\n/, ""
+      model.import_databases keys, doc
+    else
+      diff.times do |i|
+        id = start_id + i
+        doc = Nokogiri::HTML(open(params[:link] + id.to_s)).text.squeeze.strip.gsub /\r\n|\r|\n/, ""
+        model.import_databases keys, doc
+      end
+    end
+    redirect_to root_path(count: model.count - count)
+  rescue
+    redirect_to root_path
   end
 end
