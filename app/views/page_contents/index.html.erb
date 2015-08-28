@@ -1,0 +1,22 @@
+<h1>PageContents#index</h1>
+<%= link_to :Create, new_page_content_path, class: "btn btn-primary btn-lg" %>
+<br/>
+<br/>
+<div class="panel panel-default">
+  <div class="panel-heading">List page fetch form internet</div>
+  <table class="table">
+    <tr>
+      <th>STT</th>
+      <th>Link</th>
+      <th>Action</th>
+    </tr>
+    <% @page_contents.each_with_index do |page_content, index| %>
+      <tr>
+        <td><%= @per_page * ((params[:page] || 1).to_i - 1) + index + 1 %></td>
+        <td><%= link_to page_content.link, page_content.link, target: "_blank" %> </td>
+        <td><%= link_to :show, page_content_path(page_content) %></td>
+      </tr>
+    <% end %>
+  </table>
+  <%= will_paginate @page_contents %>
+</div>

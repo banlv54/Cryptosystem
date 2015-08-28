@@ -7,8 +7,15 @@
   <%= csrf_meta_tags %>
 </head>
 <body class="<%= @body_class %>">
-
-<%= yield %>
+  <header>
+    <ul class="nav nav-tabs header">
+      <li role="presentation" class="<%= class_active '/' %>"><a href="<%= root_path %>">Home</a></li>
+      <li role="presentation" class="<%= class_active page_contents_path %>"><a href="<%= page_contents_path %>">Page Content</a></li>
+    </ul>
+  </header>
+  <div id="wrap">
+    <%= yield %>
+  </div>
 
 </body>
 </html>

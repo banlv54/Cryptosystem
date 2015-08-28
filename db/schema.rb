@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150824071130) do
+ActiveRecord::Schema.define(version: 20150826020512) do
 
   create_table "ciphers", force: :cascade do |t|
     t.text     "content"
@@ -60,5 +60,15 @@ ActiveRecord::Schema.define(version: 20150824071130) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "page_contents", force: :cascade do |t|
+    t.text     "title"
+    t.text     "content"
+    t.string   "link"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "page_contents", ["link"], name: "index_page_contents_on_link"
 
 end

@@ -1,10 +1,10 @@
 <% @body_class = "document-index" %>
-<h1>Enter your documents</h1>
+<h2>Enter your documents</h2>
 
 <% if params[:count].to_i > 0 %>
   <div class="alert alert-danger" role="alert">
     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-    <%= "Import #{params[:count]} new key pair!" %>
+    <%= "Import #{params[:count]} new key!" %>
   </div>
 <% end %>
 
@@ -31,7 +31,7 @@
       End ID <%= number_field_tag :end_id, 0, class: "form-control" %>
       Key type <%= select_tag :type, options_for_select((1..5).to_a), class: "form-control" %>
       <br/>
-      <%= f.submit class: "btn btn-primary import_data" %>
+      <%= f.submit :Import, class: "btn btn-primary import_data" %>
     <% end %>
   </div>
 </div>

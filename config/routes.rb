@@ -1,7 +1,18 @@
 Rails.application.routes.draw do
 
-  resources :documents
+  get 'page_contents/show'
+
+  get 'page_contents/new'
+
+  get 'page_contents/index'
+
+  resources :documents do
+    get :export_file, on: :collection
+    post :export_file, on: :collection
+  end
   resources :ciphers
+  resources :logs, only: [:index, :show]
+  resources :page_contents
 
   root 'documents#index'
   # The priority is based upon order of creation: first created -> highest priority.

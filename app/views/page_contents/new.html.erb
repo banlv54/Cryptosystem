@@ -1,0 +1,8 @@
+<h1>PageContents#new</h1>
+<%= form_for @page_content do |f| %>
+  Link:  <%= text_field_tag :link, "", size: "100px", class: "form-control" %><br/>
+  Start ID <%= number_field_tag :start_id, 1, class: "form-control" %><br/>
+  End ID <%= number_field_tag :end_id, 0, class: "form-control" %><br/>
+  <br/><br/>
+  <%= f.submit :Import, class: "btn btn-primary import_data" %><br/>
+<% end %>

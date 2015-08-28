@@ -1,0 +1,12 @@
+<table class="table">
+  <tr>
+    <th>File name</th>
+    <th>Action</th>
+  </tr>
+  <% @files.each_with_index do |file, index| %>
+    <tr>
+      <td><%= file %></td>
+      <td><%= link_to :show, log_path(index) %> / <%= link_to :download, log_path(index, dl: 1) %></td>
+    </tr>
+  <% end %>
+</table>

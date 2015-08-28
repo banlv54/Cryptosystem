@@ -5,9 +5,6 @@ body {
     padding-left: 100px;
 }
 .document-show, .document-index {
-  h1 {
-    text-align: center;
-  }
   .content {
     background-color: LightGray;
     padding: 10px;
@@ -15,4 +12,29 @@ body {
   .break-word {
     word-wrap: break-word;
   }
+}
+header {
+  background-color: black;
+  top: 0;
+  position: fixed;
+  right: 0;
+  left: 0;
+  z-index: 1030;
+  margin-left: 100px;
+  margin-right: 100px;
+  text-align: -webkit-center;
+
+  .nav li a{
+    color: white;
+  }
+  .nav li a:hover {
+    color: black;
+  }
+}
+.header {
+  width: 50%;
+}
+#wrap {
+  margin-top: 60px;
+  margin-right: 100px;
 }

@@ -8,6 +8,7 @@ class DocumentsController < ApplicationController
   def create
     # http://www.govap.hochiminhcity.gov.vn/chuyende/lists/posts/post.aspx?ItemID=651
     import_database and return if params[:link]
+
     cipher_encryptor = CipherEncryptor.new(nil, document_params[:content], params[:type])
     cipher_encryptor.encode
     cipher = Cipher.create content: cipher_encryptor.pwd,
@@ -44,20 +45,32 @@ class DocumentsController < ApplicationController
       .map &:to_i
     diff = end_id - start_id + 1
     model = CipherEncryptor::MODELS[params[:type].to_i].constantize
-    count = model.count
+
+    logger = Logger.new Rails.root + "log/import_#{Time.now.to_s.gsub(' ', '_')}.log"
+    logger.info "-------Import for #{model.name}--------"
+    total_count = count = model.count
     keys = model.pluck :key
+
     if diff <= 0
       doc = Nokogiri::HTML(open(params[:link])).text.squeeze.strip.gsub /\r\n|\r|\n/, ""
       model.import_databases keys, doc
+      redirect_to root_path(count: model.count - total_count)
     else
       diff.times do |i|
         id = start_id + i
-        doc = Nokogiri::HTML(open(params[:link] + id.to_s)).text.squeeze.strip.gsub /\r\n|\r|\n/, ""
-        model.import_databases keys, doc
+        link = params[:link] + id.to_s
+        begin
+          doc = Nokogiri::HTML(open(link)).text.squeeze.strip.gsub /\r\n|\r|\n/, ""
+          model.import_databases keys, doc
+          new_count = model.count
+          logger.info "Import from #{link}: #{new_count - count}"
+          count = new_count
+        rescue
+        end
       end
+      logger.info "-------Import for #{model.name}---END-------"
+
+      redirect_to root_path(count: model.count - total_count)
     end
-    redirect_to root_path(count: model.count - count)
-  rescue
-    redirect_to root_path
   end
 end
