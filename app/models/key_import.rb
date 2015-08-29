@@ -6,12 +6,10 @@ module KeyImport
       def import_databases keys, doc
         l = doc.length
         i = 0
-        ActiveRecord::Base.transaction do
-          doc.scan(/.{#{key_type}}|.{1}/).each do |key|
-            if keys.exclude?(key)
-              create key: key
-              keys << key
-            end
+        doc.scan(/.{#{key_type}}|.{1}/).each do |key|
+          if keys.exclude?(key)
+            create key: key
+            keys << key
           end
         end
       end

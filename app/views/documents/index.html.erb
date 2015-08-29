@@ -26,10 +26,10 @@
 
   <div id="menu2" class="tab-pane fade">
     <%= form_for @document, class: "form-group" do |f| %>
-      Link:  <%= text_field_tag :link, "", size: "100px", class: "form-control" %>
-      Start ID <%= number_field_tag :start_id, 1, class: "form-control" %>
-      End ID <%= number_field_tag :end_id, 0, class: "form-control" %>
-      Key type <%= select_tag :type, options_for_select((1..5).to_a), class: "form-control" %>
+      Start number key <%= number_field_tag :start_id, 1, class: "form-control" %>
+      End number key <%= number_field_tag :end_id, 0, class: "form-control" %>
+      Last document imported <%= number_field_tag :last_page_id, 0, class: "form-control" %>
+      End document imported <%= number_field_tag :end_page_id, 0, class: "form-control" %>
       <br/>
       <%= f.submit :Import, class: "btn btn-primary import_data" %>
     <% end %>
