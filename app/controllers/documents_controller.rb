@@ -8,20 +8,23 @@ class DocumentsController < ApplicationController
   def create
     # http://www.govap.hochiminhcity.gov.vn/chuyende/lists/posts/post.aspx?ItemID=651
     # import_database and return if params[:link]
-    Document.import_database params[:start_id].to_i, params[:end_id].to_i,
-      params[:last_page_id].to_i, params[:end_page_id].to_i
-    # cipher_encryptor = CipherEncryptor.new(nil, document_params[:content], params[:type])
-    # cipher_encryptor.encode
-    # cipher = Cipher.create content: cipher_encryptor.pwd,
-    #   max_length: cipher_encryptor.max_length
-    # @document = Document.new document_params.merge encryption_type: params[:type]
-    # @document.cipher = cipher
-    # @document.content = cipher_encryptor.document
-    # if @document.save
-      redirect_to root_path(notice: true)
-    # else
-    #   redirect_to root_path(notice: false)
-    # end
+    if params[:last_page_id]
+      Document.import_database(params[:start_id].to_i, params[:end_id].to_i,
+        params[:last_page_id].to_i, params[:end_page_id].to_i)
+    else
+      cipher_encryptor = CipherEncryptor.new(nil, document_params[:content], params[:type])
+      cipher_encryptor.encode
+      cipher = Cipher.create content: cipher_encryptor.pwd,
+        max_length: cipher_encryptor.max_length
+      @document = Document.new document_params.merge encryption_type: params[:type]
+      @document.cipher = cipher
+      @document.content = cipher_encryptor.document
+      if @document.save
+        redirect_to root_path(notice: true)
+      else
+        redirect_to root_path(notice: false)
+      end
+    end
   end
 
   def show
