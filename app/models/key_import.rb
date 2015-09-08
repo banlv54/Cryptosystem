@@ -19,4 +19,16 @@ module KeyImport
       end
     end
   end
+
+  private
+  def create_key
+    s_random = ""
+    loop do
+      values = []
+      (self.class.key_type + 1).times{values << ("A".."Z").to_a.sample}
+      s_random = values.join("")
+      break unless self.class.exists? value: s_random
+    end
+    self.value = s_random
+  end
 end

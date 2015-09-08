@@ -1,0 +1,8 @@
+<h1>KeyList#index</h1>
+<table class="table table-bordered">
+  <% @list_paths.each do |list_path| %>
+    <tr>
+      <td><%= link_to list_path, show_list_key_lists_path(model_name: list_path.to_s) %></td>
+    </tr>
+  <% end %>
+</table>

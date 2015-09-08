@@ -15,7 +15,6 @@ class Document < ActiveRecord::Base
       keys[index] = models[index].pluck :key
       counts[index] = models[index].count
     end
-    # binding.pry
     transaction do
       PageContent.where("id > ? AND id < ?", last_page_id, end_page_id).pluck(:content)
         .each_with_index do |doc, ind|

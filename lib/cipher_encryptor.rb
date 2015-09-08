@@ -8,7 +8,7 @@ class CipherEncryptor
     5 => "KeyPentum"
   }
 
-  def initialize password, document, type = nil #pair
+  def initialize password, document, type = nil
     @document = document
     @type = (type || 1).to_i
     import_databases if password.nil?
@@ -17,12 +17,13 @@ class CipherEncryptor
   end
 
   def max_length
-    model.count
+    model.key_type + 1
   end
 
   def generate_key
-    l = max_length
-    (0..l - 1).to_a.shuffle.map{|k| k.to_s.rjust(l.to_s.length, "0")}
+    model.pluck(:value)
+    # l = max_length
+    # (0..l - 1).to_a.shuffle.map{|k| k.to_s.rjust(l.to_s.length, "0")}
   end
 
   def decode
@@ -30,7 +31,7 @@ class CipherEncryptor
     i = 0
     l = @document.length
     hash_invert = @hash_map.invert
-    jum = max_length.to_s.length
+    jum = max_length
     @document.scan(/.{#{jum}}|.{1}/).each do |key|
       res += hash_invert[key]
     end

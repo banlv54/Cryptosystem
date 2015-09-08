@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150826020512) do
+ActiveRecord::Schema.define(version: 20150831014819) do
 
   create_table "ciphers", force: :cascade do |t|
     t.text     "content"
@@ -33,32 +33,47 @@ ActiveRecord::Schema.define(version: 20150826020512) do
 
   create_table "key_pairs", force: :cascade do |t|
     t.string   "key"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.integer  "tanso"
+    t.decimal  "tansuat",    precision: 12, scale: 10
+    t.string   "value"
   end
 
   create_table "key_penta", force: :cascade do |t|
     t.string   "key"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.integer  "tanso"
+    t.decimal  "tansuat",    precision: 12, scale: 10
+    t.string   "value"
   end
 
   create_table "key_quadruples", force: :cascade do |t|
     t.string   "key"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.integer  "tanso"
+    t.decimal  "tansuat",    precision: 12, scale: 10
+    t.string   "value"
   end
 
   create_table "key_singles", force: :cascade do |t|
     t.string   "key"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.integer  "tanso"
+    t.decimal  "tansuat",    precision: 12, scale: 10
+    t.string   "value"
   end
 
   create_table "key_triples", force: :cascade do |t|
     t.string   "key"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.integer  "tanso"
+    t.decimal  "tansuat",    precision: 12, scale: 10
+    t.string   "value"
   end
 
   create_table "page_contents", force: :cascade do |t|

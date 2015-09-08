@@ -1,0 +1,17 @@
+<table class="table table-bordered">
+  <tr>
+    <th><%= sort_link(@q, :key) %></th>
+    <th><%= sort_link(@q, :tanso, "Tan so") %></th>
+    <th><%= sort_link(@q, :tansuat, "Tan suat") %></th>
+    <!-- <th>HTML entity</th> -->
+  </tr>
+  <% coder = HTMLEntities.new :expanded %>
+  <% @keys.each do |key| %>
+    <tr>
+      <td><%= "'#{key.key}'" %></td>
+      <td><%= key.tanso %></td>
+      <td><%= key.tansuat %></td>
+      <!-- <td><%#= coder.encode key.key, :basic, :decimal %></td> -->
+    </tr>
+  <% end %>
+</table>
