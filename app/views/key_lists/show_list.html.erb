@@ -1,5 +1,8 @@
+<%= @keys.count %></br>
+<%= will_paginate @keys %>
 <table class="table table-bordered">
   <tr>
+    <th>ID</th>
     <th><%= sort_link(@q, :key) %></th>
     <th><%= sort_link(@q, :tanso, "Tan so") %></th>
     <th><%= sort_link(@q, :tansuat, "Tan suat") %></th>
@@ -8,6 +11,7 @@
   <% coder = HTMLEntities.new :expanded %>
   <% @keys.each do |key| %>
     <tr>
+      <td><%= key.id %></td>
       <td><%= "'#{key.key}'" %></td>
       <td><%= key.tanso %></td>
       <td><%= key.tansuat %></td>

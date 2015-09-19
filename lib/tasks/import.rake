@@ -8,6 +8,16 @@ namespace :import do
     end
   end
 
+  desc "Task description"
+  task create_key: :environment do
+    ActiveRecord::Base.transaction do
+      KeySingle.delete_all
+      PageContent.pluck(:content).map{|ar| ar.split("").uniq}.inject(:|).each do |k|
+        KeySingle.create key: k
+      end
+    end
+  end
+
   task tanso_tansuat1: :environment do
     all_content = PageContent.pluck(:content).join("")
     length = all_content.length
@@ -257,5 +267,38 @@ namespace :import do
     puts "END: #{Time.now - start}"
 
     puts "END: #{Time.now - start_time}"
+  end
+
+  desc "Tan suat"
+  task fix_tansuat: :environment do
+    [KeySingle, KeyPair, KeyTriple, KeyQuadruple].each do |model|
+      puts "Fix #{model.name}"
+      start = Time.now
+      ActiveRecord::Base.transaction do
+        count = model.sum(:tanso)
+        model.all.each do |key|
+          key.update_attributes tansuat: key.tanso.to_f/count
+        end
+      end
+      puts "END #{Time.now - start}"
+    end
+  end
+
+  desc "Task description"
+  task fix_duplicate: :environment do
+    [KeySingle, KeyPair, KeyTriple, KeyQuadruple, KeyPentum].each do |model|
+      puts "Fix #{model.name}"
+      start = Time.now
+      c = 0
+      ActiveRecord::Base.transaction do
+        model.where("key like '% %'").group(:key).count.select{|k, v| v > 1}.each do |key, val|
+          a = model.where(key: key)
+          a.first.update_columns tanso: a.map(&:tanso).sum, tansuat: a.map(&:tansuat).sum
+          a.last(val - 1).each &:delete
+          puts "#{c += 1}-#{key}"
+        end
+      end
+      puts "END #{Time.now - start}"
+    end
   end
 end

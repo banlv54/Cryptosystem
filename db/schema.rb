@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150831014819) do
+ActiveRecord::Schema.define(version: 20150918182818) do
 
   create_table "ciphers", force: :cascade do |t|
     t.text     "content"
@@ -40,6 +40,8 @@ ActiveRecord::Schema.define(version: 20150831014819) do
     t.string   "value"
   end
 
+  add_index "key_pairs", ["key"], name: "index_key_pairs_on_key"
+
   create_table "key_penta", force: :cascade do |t|
     t.string   "key"
     t.datetime "created_at",                           null: false
@@ -48,6 +50,8 @@ ActiveRecord::Schema.define(version: 20150831014819) do
     t.decimal  "tansuat",    precision: 12, scale: 10
     t.string   "value"
   end
+
+  add_index "key_penta", ["key"], name: "index_key_penta_on_key"
 
   create_table "key_quadruples", force: :cascade do |t|
     t.string   "key"
@@ -58,6 +62,8 @@ ActiveRecord::Schema.define(version: 20150831014819) do
     t.string   "value"
   end
 
+  add_index "key_quadruples", ["key"], name: "index_key_quadruples_on_key"
+
   create_table "key_singles", force: :cascade do |t|
     t.string   "key"
     t.datetime "created_at",                           null: false
@@ -67,6 +73,8 @@ ActiveRecord::Schema.define(version: 20150831014819) do
     t.string   "value"
   end
 
+  add_index "key_singles", ["key"], name: "index_key_singles_on_key"
+
   create_table "key_triples", force: :cascade do |t|
     t.string   "key"
     t.datetime "created_at",                           null: false
@@ -75,6 +83,8 @@ ActiveRecord::Schema.define(version: 20150831014819) do
     t.decimal  "tansuat",    precision: 12, scale: 10
     t.string   "value"
   end
+
+  add_index "key_triples", ["key"], name: "index_key_triples_on_key"
 
   create_table "page_contents", force: :cascade do |t|
     t.text     "title"
