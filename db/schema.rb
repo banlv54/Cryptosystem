@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150918182818) do
+ActiveRecord::Schema.define(version: 20150924063038) do
 
   create_table "ciphers", force: :cascade do |t|
     t.text     "content"
@@ -30,6 +30,56 @@ ActiveRecord::Schema.define(version: 20150918182818) do
   end
 
   add_index "documents", ["cipher_id"], name: "index_documents_on_cipher_id"
+
+  create_table "key_decas", force: :cascade do |t|
+    t.string   "key"
+    t.integer  "tanso"
+    t.decimal  "tansuat",    precision: 12, scale: 10
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
+
+  add_index "key_decas", ["key"], name: "index_key_decas_on_key"
+
+  create_table "key_hepta", force: :cascade do |t|
+    t.string   "key"
+    t.integer  "tanso"
+    t.decimal  "tansuat",    precision: 12, scale: 10
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
+
+  add_index "key_hepta", ["key"], name: "index_key_hepta_on_key"
+
+  create_table "key_hexas", force: :cascade do |t|
+    t.string   "key"
+    t.integer  "tanso"
+    t.decimal  "tansuat",    precision: 12, scale: 10
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
+
+  add_index "key_hexas", ["key"], name: "index_key_hexas_on_key"
+
+  create_table "key_nonas", force: :cascade do |t|
+    t.string   "key"
+    t.integer  "tanso"
+    t.decimal  "tansuat",    precision: 12, scale: 10
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
+
+  add_index "key_nonas", ["key"], name: "index_key_nonas_on_key"
+
+  create_table "key_octa", force: :cascade do |t|
+    t.string   "key"
+    t.integer  "tanso"
+    t.decimal  "tansuat",    precision: 12, scale: 10
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
+
+  add_index "key_octa", ["key"], name: "index_key_octa_on_key"
 
   create_table "key_pairs", force: :cascade do |t|
     t.string   "key"
