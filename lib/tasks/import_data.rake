@@ -3,19 +3,34 @@ namespace :import_data do
     # YAML::load_file(File.join(Rails.root, 'db/data.yml'))
     puts "begin #{be = Time.now}"
     io = File.new(Rails.root + "db/data.yml")
-    YAML.load_documents(io) do |ydoc|
-      ydoc.keys.each do |table_name|
-        ActiveRecord::Base.transaction do
-          next if ydoc[table_name].nil?
-          puts "Start #{start = Time.now}"
-          puts "table_name"
-          table_name.classify.constantize.delete_all
-          records = ydoc[table_name]["records"]
-          columns = ydoc[table_name]["columns"]
-          records.each do |record|
-            table_name.classify.constantize.create Hash[columns.zip(record)]
-          end
-          puts "End #{Time.now - start}"
+    File.open("/home/itachi/data.sql", "w") do |file|
+      YAML.load_documents(io) do |ydoc|
+        ydoc.keys.each do |table_name|
+          # ActiveRecord::Base.transaction do
+            next if ydoc[table_name].nil?
+            next if table_name != "key_pairs"
+            puts "Start #{start = Time.now}"
+            puts "table_name"
+            table_name.classify.constantize.delete_all
+            records = ydoc[table_name]["records"]
+            columns = ydoc[table_name]["columns"]
+            count = -1
+            # slq = ""
+            # records.each_slice(1000) do |record|
+              columns = column_names.map{|cn| ActiveRecord::Base.connection.columns(table_name).detect{|c| c.name == cn}}
+              quoted_column_names = column_names.map { |column| ActiveRecord::Base.connection.quote_column_name(column) }.join(',')
+              quoted_table_name = SerializationHelper::Utils.quote_table(table)
+              quoted_values = records.map{|v| v.zip(columns).map{|c| "(#{ActiveRecord::Base.connection.quote(c.first, c.last)}.join(',')})"}}.join(",")
+              # ActiveRecord::Base.connection.execute("INSERT INTO #{quoted_table_name} (#{quoted_column_names}) VALUES #{quoted_values}")
+              file.puts "INSERT INTO #{quoted_table_name} (#{quoted_column_names}) VALUES #{quoted_values};"
+              # table_name.classify.constantize.create Hash[columns.zip(record)]
+              # if count % 1000 == 0
+              #   sql = "INSERT INTO #{table_name} (key, created_at, updated_at) VALUES (#{ActiveRecord::Base.connection.quote 'key'}, '#{date}', '#{date}')"
+              # else
+              # end
+            # end
+            puts "End #{Time.now - start}"
+          # end
         end
       end
     end
@@ -25,10 +40,20 @@ namespace :import_data do
   task key6: :environment do
     KeyHexa.delete_all
     puts "Import 6 #{Time.now}"
+    arr = KeySingle.pluck(:key)
     start_time = Time.now
+    date = "2015-09-24 16:00:00"
+    sql = "INSERT INTO key_hexas (key, created_at, updated_at) VALUES (#{ActiveRecord::Base.connection.quote 'key'}, '#{date}', '#{date}')"
+    count = 0
     ActiveRecord::Base.transaction do
       PageContent.pluck(:content).map{|k| k.scan(/.{6}/)}.flatten.uniq.each do |key|
-        KeyHexa.create key: key
+        next if not_in_check(key, arr)
+        sql += ", (#{ActiveRecord::Base.connection.quote key}, '#{date}', '#{date}')"
+        count += 1
+        if (count % 400 == 0)
+          ActiveRecord::Base.connection.execute(sql)
+          sql = "INSERT INTO key_hexas (key, created_at, updated_at) VALUES (#{ActiveRecord::Base.connection.quote 'key'}, '#{date}', '#{date}')"
+        end
       end
     end
     puts "END: #{Time.now - start_time}"
@@ -84,7 +109,6 @@ namespace :import_data do
         end
       end
     end
-    binding.pry
     puts "END: #{Time.now - start_time}"
   end
 
@@ -97,6 +121,33 @@ namespace :import_data do
       PageContent.pluck(:content).map{|k| k.scan(/.{10}/)}.flatten.uniq.each do |key|
         next if not_in_check(key, arr)
         KeyDeca.create key: key
+      end
+    end
+    puts "END: #{Time.now - start_time}"
+  end
+
+  task key_model: :environment do
+    arr = KeySingle.pluck(:key)
+    model = ENV["MODEL"].constantize
+    model.delete_all
+    puts "Import #{model} #{Time.now}"
+    start_time = Time.now
+    date = "2015-09-25 16:00:00"
+    sql = "INSERT INTO #{model.table_name} (key, created_at, updated_at) VALUES "
+    count = 0
+    ActiveRecord::Base.transaction do
+      PageContent.pluck(:content).map{|k| k.scan(/.{#{model.key_type}}/)}.flatten.uniq.each do |key|
+        next if not_in_check(key, arr)
+        count += 1
+        if (count % 1000 == 0)
+          ActiveRecord::Base.connection.execute(sql + " (#{ActiveRecord::Base.connection.quote key}, '#{date}', '#{date}')")
+          sql = "INSERT INTO #{model.table_name} (key, created_at, updated_at) VALUES "
+        else
+          sql += " (#{ActiveRecord::Base.connection.quote key}, '#{date}', '#{date}'),"
+        end
+      end
+      if count % 1000 != 0
+        ActiveRecord::Base.connection.execute(sql + " ('key', '#{date}', '#{date}')")
       end
     end
     puts "END: #{Time.now - start_time}"

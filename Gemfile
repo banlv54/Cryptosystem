@@ -57,5 +57,5 @@ gem 'will_paginate', '~> 3.0.6'
 gem 'ransack'
 gem 'htmlentities'
 gem 'yaml_db'
-gem "mysql2"
+gem "mysql2", "~> 0.3.13"
 
